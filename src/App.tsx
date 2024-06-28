@@ -2,16 +2,19 @@ import React, { useState, ChangeEventHandler, useEffect } from "react";
 import NoteItem from "./components/NoteItem";
 import axios from "axios";
 
+type noteType = {
+  id: string;
+  title: string;
+  description?: string;
+};
+
 // let title = "";
 const App = () => {
   const [count, setCount] = useState(0);
-  const [notes, setNotes] = useState<
-    {
-      id: string;
-      title: string;
-      description?: string;
-    }[]
-  >([]);
+
+  const [viewNote, setViewNote] = useState<noteType>();
+
+  const [notes, setNotes] = useState<noteType[]>([]);
 
   const [values, setValues] = useState({
     title: "",
@@ -114,6 +117,10 @@ const App = () => {
           <NoteItem
             key={note.id}
             title={note.title}
+            onViewClick={() => {
+              setViewNote(note);
+            }}
+            description={viewNote?.id === note.id ? viewNote?.description : ""}
             onEditClick={() => {
               setSelectedNoteId(note.id);
               setValues({
