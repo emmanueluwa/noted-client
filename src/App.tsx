@@ -121,6 +121,19 @@ const App = () => {
                 description: note.description || "",
               });
             }}
+            onDeleteClick={async () => {
+              const result = confirm("Are you sure?");
+              if (result) {
+                //delete that
+                await axios.delete("http://localhost:8000/note/" + note.id);
+
+                const updatedNotes = notes.filter(({ id }) => {
+                  if (id !== note.id) return note;
+                });
+
+                setNotes([...updatedNotes]);
+              }
+            }}
           />
         );
       })}
