@@ -1,9 +1,10 @@
-import React, { useState, ChangeEventHandler } from "react";
+import React, { useState, ChangeEventHandler, useEffect } from "react";
 import NoteItem from "./components/NoteItem";
 import axios from "axios";
 
 // let title = "";
 const App = () => {
+  const [count, setCount] = useState(0);
   const [notes, setNotes] = useState<
     {
       id: string;
@@ -24,6 +25,14 @@ const App = () => {
     setValues({ ...values, [name]: value });
   };
 
+  useEffect(() => {
+    const fetchNotes = async () => {
+      const { data } = await axios("http://localhost:8000/note");
+      setNotes(data.notes);
+    };
+    fetchNotes();
+  }, []);
+
   return (
     <div className="max-w-3xl mx-auto space-y-6">
       <form
@@ -41,6 +50,12 @@ const App = () => {
         }}
         className="space-y-6 bg-white shadow-md rounded p-5 "
       >
+        <div>
+          <span>{count} </span>
+          <button type="button" onClick={() => setCount(count + 1)}>
+            Run it up
+          </button>
+        </div>
         <h1 className="font-semibold text-2xl text-center">Noted</h1>
         <div>
           <input
@@ -70,7 +85,7 @@ const App = () => {
 
       {/* note items */}
       {notes.map((note) => {
-        return <NoteItem key={note.title} title={note.title} />;
+        return <NoteItem key={note.id} title={note.title} />;
       })}
     </div>
   );
