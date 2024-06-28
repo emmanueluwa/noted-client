@@ -118,7 +118,11 @@ const App = () => {
             key={note.id}
             title={note.title}
             onViewClick={() => {
-              setViewNote(note);
+              if (viewNote) {
+                setViewNote(undefined);
+              } else {
+                setViewNote(note);
+              }
             }}
             description={viewNote?.id === note.id ? viewNote?.description : ""}
             onEditClick={() => {
