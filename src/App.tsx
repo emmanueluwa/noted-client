@@ -4,6 +4,14 @@ import axios from "axios";
 
 // let title = "";
 const App = () => {
+  const [notes, setNotes] = useState<
+    {
+      id: string;
+      title: string;
+      description?: string;
+    }[]
+  >([]);
+
   const [values, setValues] = useState({
     title: "",
     description: "",
@@ -28,7 +36,8 @@ const App = () => {
               description: values.description,
             }
           );
-          console.log(data);
+          setNotes([data.note, ...notes]);
+          setValues({ title: "", description: "" });
         }}
         className="space-y-6 bg-white shadow-md rounded p-5 "
       >
@@ -58,10 +67,11 @@ const App = () => {
           </button>
         </div>
       </form>
+
       {/* note items */}
-      <NoteItem title="first compo" />
-      <NoteItem title="second compo" />
-      <NoteItem title="third compo" />
+      {notes.map((note) => {
+        return <NoteItem key={note.title} title={note.title} />;
+      })}
     </div>
   );
 };
